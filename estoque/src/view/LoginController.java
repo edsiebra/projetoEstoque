@@ -1,7 +1,6 @@
 package view;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -10,13 +9,17 @@ import java.util.ResourceBundle;
 
 import dao.DataBaseConnection;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class LoginController implements Initializable{
@@ -38,6 +41,9 @@ public class LoginController implements Initializable{
 	
 	@FXML
 	private ImageView imgLogo;
+	
+	@FXML
+	private Button btConfig;
 	
 	
 	@FXML
@@ -61,22 +67,38 @@ public class LoginController implements Initializable{
 		Stage stage = (Stage) btCancel.getScene().getWindow();
 		stage.close();
 	}
+	
+	@FXML
+	private void onBtConfigConexao() {
+		openConfig("/view/ConexaoView.fxml");
+	}
+
+	private void openConfig(String absoluteName) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			Pane pane = loader.load();
+			
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Configurações da conexão");
+			dialogStage.setScene(new Scene(pane));
+			dialogStage.setResizable(false);
+			dialogStage.initModality(Modality.APPLICATION_MODAL);
+			dialogStage.showAndWait();
+			
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		
-		
 		lbError.setText("");
 		Image img;
-		try {
-			img = new Image(new FileInputStream("\\image\\controle-de-estoque.jpg"));
-			imgLogo.setImage(img);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		img = new Image("img/controle-de-estoque.jpg");
+		imgLogo.setImage(img);
 		
-		//imgLogo = new Image("/image/controle-de-estoque.jpg");
 	}
 	
 	public void validateLogin() {

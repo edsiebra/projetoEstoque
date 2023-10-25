@@ -54,6 +54,7 @@
             <Button fx:id="btLogin" layoutX="18.0" layoutY="255.0" mnemonicParsing="false" onAction="#onBtLoginAction" prefHeight="25.0" prefWidth="249.0" text="Login" />
             <Button fx:id="btCancel" layoutX="17.0" layoutY="298.0" mnemonicParsing="false" onAction="#onBtCancelAction" prefHeight="25.0" prefWidth="251.0" text="Cancel" />
             <Label fx:id="lbError" alignment="CENTER" layoutX="3.0" layoutY="104.0" prefHeight="17.0" prefWidth="286.0" text="Label" textFill="RED" />
+            <Button fx:id="btConfig" layoutX="163.0" layoutY="361.0" mnemonicParsing="false" onAction="#onBtConfigConexao" text="Config. Conexão" />
          </children>
       </AnchorPane>
    </right>
