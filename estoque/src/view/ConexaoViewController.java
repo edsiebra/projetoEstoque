@@ -7,14 +7,18 @@ import java.net.URL;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import utils.Griptografia;
 
 public class ConexaoViewController implements Initializable{
+	
+	private boolean recalcular = false;
 	
 	@FXML
 	private Button btCancel;
@@ -38,13 +42,21 @@ public class ConexaoViewController implements Initializable{
 	private PasswordField txtPsw;
 	
 
+	@SuppressWarnings("null")
 	@FXML
 	private void onBtSaveAction() {
+		
 		String iphost = txtHost.getText();
 		String porta = txtPorta.getText();
 		String banco = txtDB.getText();
 		String user = txtUser.getText();
 		String senha = txtPsw.getText();
+		
+		Griptografia gript = new Griptografia();
+		
+		if(recalcular) {
+			senha = gript.griptografar(senha);
+		}
 		
 		Properties props = loadPrperties();
 		
@@ -54,13 +66,14 @@ public class ConexaoViewController implements Initializable{
 			props.setProperty("banco", banco);
 			props.setProperty("user", user);
 			props.setProperty("senha", senha);
-			
+			props.setProperty("recalcular", "false");
 		} else {
 			props.setProperty("iphost", "localhost");
 			props.setProperty("porta", "5432");
 			props.setProperty("banco", "estoque");
 			props.setProperty("user", "postgres");
 			props.setProperty("senha", "database");
+			props.setProperty("recalcular", "false");
 		}
 		
 		try {
@@ -100,7 +113,7 @@ public class ConexaoViewController implements Initializable{
 	}
 
 
-	@SuppressWarnings("null")
+	
 	private void carregarDados() {
 		Properties props = loadPrperties();
 		if(props != null) {
@@ -109,12 +122,18 @@ public class ConexaoViewController implements Initializable{
 			txtDB.setText(props.getProperty("banco"));
 			txtUser.setText(props.getProperty("user"));
 			txtPsw.setText(props.getProperty("senha"));
+			if(props.getProperty("recalcular") == null) {
+				recalcular = true;
+			} else {
+				recalcular = Boolean.parseBoolean(props.getProperty("recalcular"));
+			}
 		} else {
 			txtHost.setText("localhost");
 			txtPorta.setText("5432");
 			txtDB.setText("estoque");
 			txtUser.setText("postgres");
 			txtPsw.setText("database");
+			recalcular = true;
 		}
 		
 	}

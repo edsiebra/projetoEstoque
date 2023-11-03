@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ResourceBundle;
 
 import dao.DataBaseConnection;
+import dao.LoginDAO;
+import dao.UsuarioDAO;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,8 +23,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import utils.Griptografia;
 
 public class LoginController implements Initializable{
+	
+	private LoginDAO _loginDAO = null;
+	private UsuarioDAO _usuarioDAO = null;
+	
+	
 	
 	@FXML
 	private TextField txtUser;
@@ -102,10 +110,16 @@ public class LoginController implements Initializable{
 	}
 	
 	public void validateLogin() {
+		_usuarioDAO = new UsuarioDAO();
+		Griptografia gript = new Griptografia();
 		DataBaseConnection connection = new DataBaseConnection();
 		Connection connectDB = connection.getConnection();
 		
-		String verifylogin = "SELECT count(1) FROM usuario WHERE login = '" + txtUser.getText() + "' and senha = '" + pfPassword.getText() + "'";
+		String senha = gript.griptografar(pfPassword.getText());
+		
+		//boolean usuario = _usuarioDAO.findUsuario(txtUser.getText(), senha);
+		
+		String verifylogin = "SELECT count(1) FROM usuario WHERE login = '" + txtUser.getText() + "' and senha = '" + senha + "'";
 		
 		try {
 			Statement statement = connectDB.createStatement();
@@ -121,6 +135,12 @@ public class LoginController implements Initializable{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		/*if(usuario) {
+			lbError.setText("conectado");
+		} else {
+			lbError.setText("Usuário ou a senha não conferem");
+		}*/
 	}
 
 }
