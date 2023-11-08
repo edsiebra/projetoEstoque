@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
 
-import utils.Griptografia;
+import utils.Criptografia;
 
 
 public class DataBaseConnection {
@@ -22,7 +22,7 @@ public class DataBaseConnection {
 	
 	
 	public Connection getConnection() {
-		Griptografia gript = new Griptografia();
+		Criptografia gript = new Criptografia();
 		
 		String senha = null;
 		
@@ -49,7 +49,7 @@ public class DataBaseConnection {
 		
 		if(recalcular) {
 			senha = txtPsw;
-			txtPsw = gript.griptografar(txtPsw);
+			txtPsw = gript.criptografar(txtPsw);
 			
 			try {
 				FileOutputStream fos = new FileOutputStream("conect.properties");
